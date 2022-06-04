@@ -67,13 +67,13 @@ public class PictureTest {
     @Test
     public void testSavePictureInRepository() {
         Picture picture = new Picture("pic21", "description", new Binary("testPicture".getBytes(StandardCharsets.UTF_8)));
-        Mono<Picture> pictureMono = pictureRepository.save(picture);
+        Mono<Picture> pictureMono = pictureService.addPicture(picture);
 
         StepVerifier
                 .create(pictureMono)
-                .assertNext(account -> {
-                    assertEquals("pic21", picture.getName());
-                    assertEquals("description" , picture.getDescription());
+                .assertNext(each -> {
+                    assertEquals("pic21", each.getName());
+                    assertEquals("description" , each.getDescription());
                 })
                 .expectComplete()
                 .verify();
