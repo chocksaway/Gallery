@@ -2,33 +2,30 @@ package com.chocksaway.gallery.model;
 
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.experimental.Accessors;
-import org.springframework.data.annotation.CreatedDate;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.annotation.LastModifiedDate;
-import org.springframework.data.annotation.Version;
-import org.springframework.data.relational.core.mapping.Table;
-
+import org.bson.types.Binary;
+import org.springframework.data.mongodb.core.mapping.Document;
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
-import java.time.LocalDateTime;
 
-@Table
+@Document(collection = "photos")
 @Getter
 @Setter
+@Builder
 @Accessors(chain = true)
-public class Picture {
+public class  Picture {
     private String name;
 
     @Size(max = 4000)
     @NotBlank
     private String description;
 
-    public Picture(String name, String description) {
+    private Binary image;
+
+    public Picture(String name, String description, Binary image) {
         this.name = name;
         this.description = description;
+        this.image = image;
     }
 }

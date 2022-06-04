@@ -9,7 +9,7 @@ import reactor.core.publisher.Mono;
 public class PictureService {
 
     private final PictureRepository pictureRepository;
-
+ 
     public PictureService(PictureRepository pictureRepository) {
         this.pictureRepository = pictureRepository;
     }

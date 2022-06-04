@@ -3,6 +3,7 @@ package com.chocksaway.gallery;
 import com.chocksaway.gallery.model.Picture;
 import com.chocksaway.gallery.repository.PictureRepository;
 import com.chocksaway.gallery.service.PictureService;
+import org.bson.types.Binary;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,10 +15,10 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import reactor.core.publisher.Mono;
 import reactor.test.StepVerifier;
 
+import java.nio.charset.StandardCharsets;
+
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.when;
-
-// reference https://kamalhm.dev/reactive-spring-boot-application-with-r2dbc-and-postgresql
 
 @ExtendWith(SpringExtension.class)
 @SpringBootTest
@@ -39,7 +40,7 @@ public class PictureTest {
 
     @Test
     public void savedPicture() {
-        Picture picture = new Picture("pic001", "description");
+        Picture picture = new Picture("pic001", "description", new Binary("picture".getBytes(StandardCharsets.UTF_8)));
         StepVerifier.create(pictureService.addPicture(picture))
                 .consumeNextWith(savedPicture -> {
                     assertEquals("pic001", savedPicture.getName());
@@ -50,7 +51,7 @@ public class PictureTest {
 
     @Test
     public void savedUserWithMockito() {
-        Picture picture = new Picture("pic001", "description");
+        Picture picture = new Picture("pic001", "description", new Binary("picture".getBytes(StandardCharsets.UTF_8)));
 
         when(pictureRepository2.save(Mockito.any(Picture.class)))
                 .thenReturn(Mono.just(picture));
@@ -61,6 +62,21 @@ public class PictureTest {
                     assertEquals("description", savedPicture.getDescription());
                 })
                 .verifyComplete();
+    }
+
+    @Test
+    public void testSavePictureInRepository() {
+        Picture picture = new Picture("pic21", "description", new Binary("testPicture".getBytes(StandardCharsets.UTF_8)));
+        Mono<Picture> pictureMono = pictureRepository.save(picture);
+
+        StepVerifier
+                .create(pictureMono)
+                .assertNext(account -> {
+                    assertEquals("pic21", picture.getName());
+                    assertEquals("description" , picture.getDescription());
+                })
+                .expectComplete()
+                .verify();
     }
 
 

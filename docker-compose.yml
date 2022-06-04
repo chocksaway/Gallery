@@ -2,6 +2,14 @@ version: "3.5"
 
 services:
 
+  mongoDB:
+    image: mongo:latest
+    ports:
+      - "27017:27017"
+    volumes:
+      - db-data:/data/db
+      - mongo-config:/data/config
+
   postgres:
     container_name: postgres
     image: postgres:latest
@@ -17,3 +25,5 @@ services:
 
 volumes:
   postgres_data:
+  db-data:
+  mongo-config:
