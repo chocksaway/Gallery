@@ -8,6 +8,8 @@ import io.micronaut.http.annotation.Controller;
 import io.micronaut.http.annotation.Get;
 import io.micronaut.http.annotation.Post;
 import org.reactivestreams.Publisher;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import reactor.core.publisher.Mono;
 
 import javax.validation.Valid;
@@ -18,6 +20,8 @@ import static io.micronaut.http.HttpStatus.CREATED;
 
 @Controller("/picture")
 class PictureController {
+
+    private static final Logger logger = LoggerFactory.getLogger(PictureController.class);
 
     private final PictureRepository pictureRepository;
 
